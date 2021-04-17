@@ -18,14 +18,13 @@ import (
 	"github.com/jinzhu/gorm/dialects/mssql"
 )
 
-/*
 var (
 	server   = "localhost"
 	port     = 1433
 	user     = "DESKTOP-80MFS0S"
 	password = ""
 	database = "ogrenci2"
-)*/
+)
 
 func main() {
 	db, err := sql.Open("mssql", "root:DESKTOP-80MFS0S@/ogrenci2")
