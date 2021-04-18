@@ -23,19 +23,63 @@ func main() {
 	db, err := sql.Open("postgres", psqlconn)
 	CheckError(err)
 
-	// close database
-	defer db.Close()
-
 	// check db
 	err = db.Ping()
 	CheckError(err)
 
+	// close database
+	defer db.Close()
 	fmt.Println("Connected!")
 
-	res, _ := db.Exec("insert into musteri(id,ad,soyad,sehir) values (5,'ali','akkaya','maras')")
-	//db.Exec("insert into musteri(id,ad,soyad,sehir) values (4,'bismillah','akkaya','maras')")
-	rowCount, _ := res.LastInsertId()
-	log.Printf("etkilenen kayıt sayısı", rowCount)
+	var (
+		Id    int
+		Ad    string
+		Soyad string
+		Sehir string
+	)
+	//kayıt ekleme satırları. her çalışmaya aynı veri eklendigi için yorum satırı yapmaya karar verdim
+	/*
+		res, _ := db.Exec("insert into musteri(id,ad,soyad,sehir) values (7,'ali','akkaya','maras')")
+		rowCount, _ := res.LastInsertId()
+		log.Printf("etkilenen kayıt sayısı", rowCount)
+	*/
+
+	/*
+
+		//eklenen kayıtları getirme işlemi
+		rows, err := db.Query("select *from musteri")
+		if err != nil {
+			log.Fatal(err)
+		}
+		//rows.columns tablodaki kolan isimlerini getirme işlemi yapmaya yarar
+		for rows.Next() {
+			err = rows.Scan(&Id, &Ad, &Soyad, &sehir)
+			if err != nil {
+				log.Fatal(err)
+			}
+			log.Printf("id: %v adı: %v soyadı: %v sehir: %v", Id, Ad, Soyad, Sehir)
+
+		}
+	*/
+
+	rows, err1 := db.Query("select *from musteri where id = 1")
+	if err1 != nil {
+		log.Fatal(err1)
+	}
+	defer rows.Close()
+	for rows.Next() {
+		err := rows.Scan(&Id, &Ad, &Soyad, &Sehir)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Printf("id si %v olna veriler %v %v %v", Id, Ad, Soyad, Sehir)
+
+	}
+	err1 = rows.Err()
+	if err1 != nil {
+		log.Fatal(err1)
+	}
+
 }
 
 func CheckError(err error) {
